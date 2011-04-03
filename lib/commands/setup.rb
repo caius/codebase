@@ -54,13 +54,19 @@ command "setup" do
     system("git config #{global} codebase.username #{username}")
     system("git config #{global} codebase.apikey #{user['api_key']}")
     system("git config #{global} codebase.domain #{domain}")
-    system("git config #{global} user.name '#{user['first_name']} #{user['last_name']}'")
-    puts "Set user.name to '#{user['first_name']} #{user['last_name']}'"
-    system("git config #{global} user.email #{user['email_address']}")
-    puts "Set user.email to '#{user['email_address']}'"
+
+    # Only overwrite these values if the user doesn't already have them set, and agrees for us to do so
+    if !system("git config #{global} user.name && git config #{global} user.email") && agree("Shall we set your name and email address, as they appear not to be set already?")
+      system("git config #{global} user.name '#{user['first_name']} #{user['last_name']}'")
+      puts "Set user.name to '#{user['first_name']} #{user['last_name']}'"
+      system("git config #{global} user.email #{user['email_address']}")
+      puts "Set user.email to '#{user['email_address']}'"
+    end
+
     puts "\e[32mConfigured Codebase API authentication properties successfully.\e[0m"
   else
     puts "\e[37;41mAccess Denied. Please ensure you have entered your username & password correctly and try again.\e[0m"
     return
   end  
+
 end
