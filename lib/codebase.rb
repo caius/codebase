@@ -14,7 +14,7 @@ module Codebase
   class NotConfiguredError < StandardError; end
   class MustBeInRepositoryError < StandardError; end
   
-  VERSION = "4.0.4"
+  VERSION = "4.0.5"
   
   def run(command, args = [])
     load_commands

@@ -75,7 +75,10 @@ Capistrano::Configuration.instance(:must_exist).load do
         require 'net/http'
         require 'uri'
         
-        real_url = "http://#{url}/#{project}/#{repository}/deployments"
+        # URL should be in this format to be compatible with the new API
+        # http://api3.codebasehq.com/PROJECTNAME/REPO/deployments 
+        
+        real_url = "http://api3.codebasehq.com/#{project}/#{repository}/deployments"
         puts "      -  URL..........: #{real_url}"
         
         url = URI.parse(real_url)
