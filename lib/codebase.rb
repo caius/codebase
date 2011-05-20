@@ -14,7 +14,7 @@ module Codebase
   class NotConfiguredError < StandardError; end
   class MustBeInRepositoryError < StandardError; end
   
-  VERSION = "4.0.5"
+  VERSION = "4.0.8"
   
   def run(command, args = [])
     load_commands
@@ -118,7 +118,7 @@ Codebase.command "help" do |command|
         end
       end
     else
-      puts "Command Not Found. Check 'point help' for a full list of commands available to you."
+      puts "Command Not Found. Check 'cb help' for a full list of commands available to you."
     end
   end
 end

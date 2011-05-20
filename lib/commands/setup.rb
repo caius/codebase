@@ -42,12 +42,14 @@ command "setup" do
   puts
     
   ## Get some details
-  domain    = ask("CodebaseHQ domain (e.g. widgetinc.codebasehq.com): ") { |q| q.validate = /\A(\w+).(codebasehq|cbhqdev).(com|local)\z/ }
-  username  = ask("Username: ") { |q| q.validate = /[\w\.]+/ }
-  password  = ask("Password: ") { |q| q.echo = false }
+  domain     = ask("CodebaseHQ domain (e.g. widgetinc.codebasehq.com): ") { |q| q.validate = /\A(\w+).(codebasehq|cbhqdev).(com|local)\z/ }
+  username   = ask("Username: ") { |q| q.validate = /[\w\.]+/ }
+  api_user   = username.match(/\//) ? username : "#{domain.split('.')[0]}/#{username}"
+  api_domain = 'api3.codebasehq.com'
+  password   = ask("Password: ") { |q| q.echo = false }
 
   ## Get the API key and save it...
-  user_properties = api_request("https://#{domain}/profile", username, password)
+  user_properties = api_request("https://#{api_domain}/profile", api_user, password)
   
   if user_properties
     user = JSON.parse(user_properties)["user"]

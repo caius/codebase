@@ -27,15 +27,23 @@ module Codebase
     end
 
     def configured?
-      domain && username && apikey
+      git_config_variable(:domain) && git_config_variable(:username) && apikey
+    end
+    
+    def new_username?
+      git_config_variable(:username).match(/(.+)\/(.+)/)
     end
     
     def domain
-      @domain ||= git_config_variable(:domain)
+      @domain ||= new_username? ? "#{new_username?[1]}.codebasehq.com" : git_config_variable(:domain)
     end
     
     def username
-      @username ||= git_config_variable(:username)
+      @username ||= new_username? ? new_username?[2] : git_config_variable(:username)
+    end
+    
+    def api_username
+      @api_username = "#{domain.split('.').first}/#{username}"
     end
     
     def apikey
@@ -119,7 +127,7 @@ module Codebase
     end
     
     def api(path, data = nil)
-      api_request("http://#{domain}/#{path}", git_config_variable(:username), git_config_variable(:apikey), data)
+      api_request("http://api3.codebasehq.com/#{path}", api_username, apikey, data)
     end
 
   end
